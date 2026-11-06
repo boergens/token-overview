@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#f6f7f3">
+  <meta name="description" content="Your private overview of Claude, ChatGPT, and Gemini usage allowances.">
+  <title>Allowance · Your AI usage</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/styles.css">
+  <script src="/app.js" type="module"></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to dashboard</a>
+  <aside class="sidebar">
+    <a href="/" class="brand" aria-label="Allowance home"><img src="/favicon.svg" width="36" height="36" alt=""><span>allowance<span class="brand-period">.</span></span></a>
+    <div class="workspace-label">YOUR WORKSPACE</div>
+    <nav aria-label="Main navigation">
+      <button class="nav-link active" data-view="chat" aria-pressed="true"><span aria-hidden="true">▦</span> Chat plans <span class="nav-count">3</span></button>
+      <button class="nav-link" data-view="api" aria-pressed="false"><span aria-hidden="true">⌘</span> Credits &amp; APIs</button>
+      <button class="nav-link" id="open-guide"><span aria-hidden="true">ⓘ</span> How it works</button>
+    </nav>
+    <div class="workspace-label provider-label">QUICK LINKS</div>
+    <nav class="provider-links" aria-label="Provider accounts">
+      <a href="https://claude.ai/settings/usage" target="_blank" rel="noopener noreferrer"><span class="tiny-mark terracotta" aria-hidden="true">✳</span> Claude <span class="external" aria-hidden="true">↗</span></a>
+      <a href="https://chatgpt.com/" target="_blank" rel="noopener noreferrer"><span class="tiny-mark green" aria-hidden="true">◎</span> ChatGPT <span class="external" aria-hidden="true">↗</span></a>
+      <a href="https://gemini.google.com/" target="_blank" rel="noopener noreferrer"><span class="tiny-mark blue" aria-hidden="true">✦</span> Gemini <span class="external" aria-hidden="true">↗</span></a>
+    </nav>
+    <div class="sidebar-bottom">
+      <div class="privacy-mark" aria-hidden="true">⌑</div>
+      <strong>Your space. Your usage.</strong>
+      <p id="access-caption">Checking private access…</p>
+      <div class="owner"><span class="avatar" aria-hidden="true">Y</span><div><strong>Personal dashboard</strong><span id="owner-caption">Owner access required</span></div></div>
+      <button id="sign-out" class="text-button" hidden>Sign out ↗</button>
+    </div>
+  </aside>
+
+  <main id="main">
+    <header class="topbar"><span>Workspace <span aria-hidden="true">/</span> <strong>Overview</strong></span><span class="privacy-pill" id="privacy-pill"><span aria-hidden="true">◈</span> Checking access</span></header>
+    <div class="content">
+      <div class="page-heading"><div><div class="eyebrow">A LITTLE CLARITY FOR YOUR AI DAY</div><h1>Room to think<span>.</span></h1><p>Claude, ChatGPT, Gemini. What’s left of your allowances, in one place.</p></div><div class="heading-actions"><button class="button secondary" id="export-data" disabled><span aria-hidden="true">↓</span> Export</button><button class="button primary" id="add-reading" disabled><span aria-hidden="true">+</span> Add reading</button></div></div>
+
+      <div id="notice" class="notice" role="status"><span class="notice-icon" aria-hidden="true">ⓘ</span><div><strong>Checking your private workspace.</strong><span>Usage readings are shown only after access is confirmed.</span></div></div>
+
+      <div class="view-switch segmented" role="group" aria-label="Account type"><button class="selected" data-view="chat" aria-pressed="true">Chat subscriptions</button><button data-view="api" aria-pressed="false">Credits &amp; APIs</button></div>
+      <section id="chat-section" class="overview-section" aria-labelledby="allowances-heading">
+        <div class="section-heading"><div><h2 id="allowances-heading">Your allowances</h2><span class="section-meta" id="reading-count">Loading…</span></div><div class="section-tools"><button class="button secondary small" id="refresh-live" disabled>↻ Refresh</button></div></div>
+        <div class="cards" id="provider-cards" aria-live="polite"></div>
+        <div class="cards-footnote"><span><span class="small-dot" aria-hidden="true"></span> Live readings refresh every 5 minutes from the collector. Manual readings are snapshots.</span><span>All times shown in your local timezone</span></div>
+      </section>
+
+      <section id="api-section" class="overview-section" aria-labelledby="credits-heading" hidden>
+        <div class="section-heading"><div><h2 id="credits-heading">Your credits</h2><span class="section-meta">Each one is a separate pot of money</span></div></div>
+        <div id="credit-overview" class="cards credit-overview"></div>
+        <div class="cards-footnote"><span><span class="small-dot" aria-hidden="true"></span> “Live” rows refresh every 5 minutes. “Checked” rows were read by hand on the billing page on that date, because no trustworthy live source exists.</span></div>
+        <div class="section-heading api-reports-heading"><div><h2 id="api-heading">Your developer APIs</h2><span class="section-meta">Separate from chat subscriptions</span></div><button class="button secondary" id="refresh-api" disabled>↻ Refresh usage</button></div>
+        <p class="api-intro">Reported balances and personal tracking budgets. Monthly usage is measured from the first day of the month in UTC.</p>
+        <div id="api-cards" class="cards" aria-live="polite"></div>
+        <div class="cards-footnote"><span>Personal budgets do not change provider limits or prevent charges.</span><button class="text-button" id="api-setup">Connect API reporting ↗</button></div>
+      </section>
+
+      <div class="bottom-grid" id="chat-details">
+        <section class="panel reset-panel" aria-labelledby="reset-heading"><div class="panel-heading"><div class="icon-box" aria-hidden="true">↻</div><div><h2 id="reset-heading">On the horizon</h2><p>Your next recorded resets</p></div><span class="soft-label" id="reset-count">0 upcoming</span></div><div id="reset-list" class="reset-list"></div></section>
+        <section class="panel explanation" aria-labelledby="about-heading"><div class="eyebrow">HOW THIS WORKS</div><h2 id="about-heading">Live where it can be.</h2><p>Claude, ChatGPT and Gemini come from the usage screens behind the Claude Code, Codex and agy sign-ins on the collector machine, refreshed every five minutes. Anything without a live figure can be recorded by hand.</p><div class="explanation-bottom"><span class="mini-marks" aria-hidden="true"><i class="terracotta">✳</i><i class="green">◎</i><i class="blue">✦</i></span><button class="text-button" id="learn-more">The details <span aria-hidden="true">↗</span></button></div></section>
+      </div>
+      <footer class="footer"><span>Less tab hopping. More headspace.</span><div><span id="storage-caption">Manual readings stored in this browser</span><span aria-hidden="true">·</span><button class="text-button" id="import-data" disabled>Import backup</button></div></footer>
+    </div>
+  </main>
+
+  <dialog id="reading-dialog" aria-labelledby="dialog-title">
+    <form id="reading-form">
+      <div class="dialog-heading"><div><div class="eyebrow">A SNAPSHOT FROM YOUR ACCOUNT</div><h2 id="dialog-title">Add a reading</h2></div><button type="button" class="close-button" data-close aria-label="Close dialog">×</button></div>
+      <p class="dialog-intro">Copy the remaining allowance shown by your provider. Never enter a password, API key, or session cookie.</p>
+      <label>Account type<select id="account-type"><option value="chat">Chat subscription</option><option value="api">Developer API</option></select></label>
+      <div class="form-grid"><label>Provider<select id="provider" name="provider"><option value="claude">Claude</option><option value="chatgpt">ChatGPT</option><option value="gemini">Gemini</option></select></label><label>Window<select id="window" name="window"><option value="current">Current window</option><option value="weekly">Weekly</option></select></label></div>
+      <div class="provider-help"><span id="provider-help"></span><a id="provider-open" href="https://claude.ai/settings/usage" target="_blank" rel="noopener noreferrer">Open account ↗</a></div>
+      <div class="form-grid"><label>Plan <span class="optional">optional</span><input name="plan" id="plan" maxlength="80" placeholder="e.g. Pro" autocomplete="off"></label><label>Model / limit name <span class="optional">optional</span><input name="scope" id="scope" maxlength="100" placeholder="e.g. All models, Work / Codex" autocomplete="off"></label></div>
+      <label>Unit shown by the provider<select id="unit" name="unit"><option value="percent">Percent remaining (%)</option><option value="messages">Messages remaining</option><option value="tokens">Tokens remaining</option><option value="credits">Credits remaining</option><option value="usd" id="usd-option" disabled hidden>USD balance remaining</option></select></label>
+      <div class="form-grid"><label>Remaining<input type="number" name="remaining" id="remaining" min="0" max="100" step="any" required placeholder="e.g. 72" inputmode="decimal"></label><label id="total-label">Total allowance <span class="optional">optional</span><input type="number" name="total" id="total" min="0.000001" step="any" placeholder="If shown" inputmode="decimal" disabled></label></div>
+      <p id="unit-hint" class="field-hint">If your provider says “28% used”, enter 72% remaining.</p>
+      <label>Resets at <span class="optional">optional · your local time</span><input type="datetime-local" name="resetsAt" id="resets-at"></label>
+      <p class="field-hint">When this time passes, the reading is marked expired. A fresh allowance is never assumed.</p>
+      <p id="form-error" class="form-error" role="alert" hidden></p>
+      <div class="dialog-footer"><button type="button" class="text-button danger" id="remove-reading" hidden>Remove reading</button><div class="dialog-actions"><button type="button" class="button secondary" data-close>Cancel</button><button type="submit" class="button primary">Save reading</button></div></div>
+    </form>
+  </dialog>
+
+  <dialog id="guide-dialog" aria-labelledby="guide-title"><div class="dialog-heading"><div><div class="eyebrow">A SMALL GUIDE</div><h2 id="guide-title">An honest overview.</h2></div><button type="button" class="close-button" data-close aria-label="Close guide">×</button></div><div class="guide-content"><p><strong>Chat subscriptions</strong> are read live where a source exists; everything else can be recorded by hand. <strong>Developer APIs</strong> show read-only OpenAI and Anthropic reporting once connected.</p><h3>Where the live numbers come from</h3><ol><li><strong>Claude:</strong> the collector uses the Claude Code sign-in on the owner’s machine to call Anthropic’s usage endpoint, the same one Claude Code shows with <code>/usage</code>. It reports the 5-hour window, the weekly window and, where they apply, model-specific weekly limits such as the separate weekly limit for Fable on Max and Ultra plans, each as a percentage used with a reset time, plus how this week’s use splits across Claude Code, chats and Cowork. Chats and Claude Code share all of these limits.</li><li><strong>ChatGPT:</strong> the collector uses the Codex sign-in to call ChatGPT’s usage endpoint, the one Codex shows with <code>/status</code>. It reports the plan’s Codex rate-limit windows as a percentage used with a reset time, and per model (for example GPT-6 Astra) only whether it can be used now and, if it is blocked, when it reopens; there is no percentage for those. A blocked model shows as blocked, with its reopen time, and that applies only to that model.</li><li><strong>Gemini:</strong> the collector runs the <code>agy</code> CLI (Google Antigravity, signed in with the owner’s Google account) in print mode with its <code>/usage</code> command, which lists the plan’s remaining quota for Gemini models and, separately, for the Claude and GPT models Antigravity offers, each with a 5-hour and a weekly window. This is the Google AI plan’s Antigravity quota, not the Gemini app’s own message limits.</li></ol><p>Provider screens usually count up and this page counts down, so cards show both: “% left” is 100 minus the provider’s own “% used” figure for that window. Nothing is estimated, and the windows are the providers’ windows, not a token count. Each card’s gauge shows the <strong>most limiting</strong> window (a used-up weekly limit beats a fresh 5-hour window), and every window is listed underneath with its own reset time. A model-specific limit such as Fable’s blocks only that model, so a smaller gauge underneath shows what is left for the model you would switch to. For Claude that is Opus 5.5, which has no limit of its own and counts against the weekly all-models limit.</p><h3>Freshness</h3><p>The collector runs every five minutes and the page refreshes itself at the same cadence. If the feed is older than 15 minutes the cards say so. If a sign-in on the collector machine expires, the card explains it; opening Claude Code, Codex or agy once refreshes that token.</p><h3>Manual readings</h3><p>For a provider or window without a live figure, add what the account shows: a percentage or an exact unit. Readings older than an hour are labeled as old, and once a recorded reset time passes the card asks for a new reading. A live figure always takes precedence over a manual one for the same window.</p><h3>Forecast</h3><p>Every collector run is kept as history. Each card’s forecast replays blocks of your own past usage, favoring recent days, a similar time of day and a similar busy or idle state, then applies each window’s real rules until something reaches 100%. Counting how often each window gets there first gives the odds. They are rough: in a backtest it was no better than “same pace as the last 7 days” at predicting the next day, and it can’t foresee a sudden burst.</p><h3>Credits</h3><p>The <strong>Credits &amp; APIs</strong> tab lists each pot separately: usage credits that extend a chat plan, API credits your plan includes each month, and purchased balances. These don’t mix. For example, Claude’s monthly API credits don’t cover Claude Code. A row marked “Checked” was read by hand on the date shown; you can record a newer balance with its button, which stays in this browser.</p><h3>API usage and budgets</h3><p>Connected API reports show consumed tokens for this calendar month in UTC, with a displayed scope and retrieval time. Reporting can be delayed. OpenAI covers its completions usage report; Anthropic covers its Messages API. A personal token budget is your tracking target for that scope, not a provider quota, prepaid balance, or spending control. Cached input is counted once. Dollar balances are never converted into token estimates.</p><h3>What stays where.</h3><p>Manual readings and budgets live in this browser only; export a backup before clearing browser data. The live feed holds percentages, reset times and plan names, nothing else. Sign-in tokens never leave the collector machine, and API reporting credentials stay on the server.</p><h3>Private when deployed.</h3><p>Cloudflare Access and a verified owner email are required before any page, asset, or report is served. A local preview is labeled separately.</p><h3>Provider references</h3><ul class="source-links"><li><a href="https://support.claude.com/en/articles/11647753-how-do-usage-and-length-limits-work" target="_blank" rel="noopener noreferrer">Claude usage and length limits ↗</a></li><li><a href="https://learn.chatgpt.com/docs/sign-in-with-chatgpt" target="_blank" rel="noopener noreferrer">ChatGPT plan usage and connected apps ↗</a></li><li><a href="https://support.google.com/gemini/answer/16275805?hl=en" target="_blank" rel="noopener noreferrer">Gemini Apps limits ↗</a></li></ul><p class="field-hint">No fixed plan quotas are hard-coded. A model’s context window is not your remaining usage allowance.</p></div></dialog>
+
+  <dialog id="budget-dialog" aria-labelledby="budget-title"><form id="budget-form"><div class="dialog-heading"><h2 id="budget-title">Personal token budget</h2><button type="button" class="close-button" data-close aria-label="Close budget">×</button></div><p class="dialog-intro">Set your own monthly tracking target for the scope shown on the API card. This does not change the provider’s quota or enforce a spending limit.</p><input type="hidden" id="budget-provider"><label>Monthly tokens<input type="number" id="budget-tokens" min="1" step="1" placeholder="Leave blank to remove the budget"></label><p class="field-hint">Remaining = your budget minus provider-reported input and output tokens. It stays unknown until usage is connected.</p><p id="budget-error" class="form-error" role="alert" hidden></p><div class="dialog-footer"><button type="button" class="button secondary" data-close>Cancel</button><button type="submit" class="button primary">Save budget</button></div></form></dialog>
+
+  <dialog id="api-setup-dialog" aria-labelledby="api-setup-title"><div class="dialog-heading"><h2 id="api-setup-title">Connect API reporting</h2><button type="button" class="close-button" data-close aria-label="Close connection guide">×</button></div><div class="guide-content"><p>The dashboard reads reporting data only. It never makes model requests.</p><h3>OpenAI API</h3><p>Configure an OpenAI admin reporting credential as the server secret <code>OPENAI_ADMIN_KEY</code>. Optionally set <code>OPENAI_PROJECT_ID</code> to restrict the report to one project.</p><h3>Anthropic API</h3><p>Anthropic’s Admin API is not available to individual accounts, which is what the Console organization here is, so this report stays off unless you set up an organization in the Console. Then configure an admin credential as <code>ANTHROPIC_ADMIN_KEY</code>, and optionally <code>ANTHROPIC_WORKSPACE_ID</code> to restrict the report to one workspace.</p><h3>Gemini API</h3><p>Automatic reporting is not configured. Use the quota or billing screen in Google AI Studio or Vertex AI to record your balance. The source must match the service you use.</p><p>Add credentials through Cloudflare’s Variables and Secrets settings for this private site, then redeploy. Do not paste them into chat or into balance fields.</p><p>Once connected, open Developer APIs or select Refresh usage. Reports may be cached for up to one minute and providers may report usage with a delay.</p></div></dialog>
+
+  <dialog id="import-dialog" aria-labelledby="import-title"><div class="dialog-heading"><h2 id="import-title">Import a backup</h2><button type="button" class="close-button" data-close aria-label="Close import dialog">×</button></div><p>This replaces the readings in this browser with your backup. Export your current readings first if you want to keep them.</p><label class="file-label">Allowance JSON backup<input type="file" id="import-file" accept=".json,application/json"></label><p class="form-error" id="import-error" role="alert" hidden></p><div class="dialog-actions"><button class="button secondary" data-close>Cancel</button><button class="button primary" id="confirm-import" disabled>Replace readings</button></div></dialog>
+  <div class="toast" id="toast" role="status" hidden></div>
+  <noscript>This dashboard requires JavaScript to display and save readings.</noscript>
+</body>
+</html>

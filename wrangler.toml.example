@@ -1,0 +1,29 @@
+# Copy to wrangler.toml, which git ignores, and fill in your own values.
+name = "your-pages-project"
+pages_build_output_dir = "./dist"
+compatibility_date = "2026-10-01"
+
+# Your Cloudflare Access application and the one email it admits. The Worker verifies the Access JWT against these
+# before serving anything. Until all three are set, every request returns 503.
+[vars]
+OWNER_EMAIL = "you@example.com"
+ACCESS_TEAM_DOMAIN = "your-team.cloudflareaccess.com"
+ACCESS_AUD = "the-64-character-audience-tag-of-your-access-application"
+
+# Live feed written by collector/collect.py (key "live"), read by the Worker at /api/live.
+[[kv_namespaces]]
+binding = "LIVE"
+id = "your-kv-namespace-id"
+
+[env.preview]
+[env.preview.vars]
+OWNER_EMAIL = "you@example.com"
+ACCESS_TEAM_DOMAIN = "your-team.cloudflareaccess.com"
+ACCESS_AUD = "the-64-character-audience-tag-of-your-access-application"
+
+[[env.preview.kv_namespaces]]
+binding = "LIVE"
+id = "your-kv-namespace-id"
+
+# Optional secrets for the API usage cards (set with `wrangler pages secret put`, never here):
+# OPENAI_ADMIN_KEY, ANTHROPIC_ADMIN_KEY, and the scope variables OPENAI_PROJECT_ID, ANTHROPIC_WORKSPACE_ID.

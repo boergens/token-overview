@@ -1,0 +1,44 @@
+{
+  "_note": "Copy to plan-credits.json, which git ignores. Credit facts with no trustworthy live source, read by hand on billing pages. They are merged into the feed as source 'checked'. Update checkedAt when you re-check. Every provider and field is optional.",
+  "claude": {
+    "credits": [
+      {
+        "id": "api-plan",
+        "label": "API credits from your plan",
+        "value": "$100 a month",
+        "detail": "Goes to the linked Claude Console organization. Covers the Claude API, not Claude Code or extra usage. Unused credits expire each billing cycle.",
+        "state": "unknown",
+        "checkedAt": "2026-01-01",
+        "renewsAt": "2026-02-01",
+        "url": "https://platform.claude.com/settings/billing"
+      }
+    ]
+  },
+  "chatgpt": {
+    "credits": [
+      {
+        "id": "api-plan",
+        "label": "API credits from your plan",
+        "value": "$100 to $500 a month by Pro tier",
+        "detail": "Must be claimed in ChatGPT billing.",
+        "state": "unknown",
+        "checkedAt": "2026-01-01",
+        "url": "https://chatgpt.com/settings/billing"
+      }
+    ]
+  },
+  "gemini": {
+    "plan": "AI Ultra",
+    "credits": [
+      {
+        "id": "api-plan",
+        "label": "Gen AI & Cloud credits",
+        "value": "$100 a month",
+        "detail": "Has to be applied to a billing account before it can be spent.",
+        "state": "warn",
+        "checkedAt": "2026-01-01",
+        "url": "https://me.developers.google.com/benefits"
+      }
+    ]
+  }
+}

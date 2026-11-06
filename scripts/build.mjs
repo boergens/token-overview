@@ -1,0 +1,14 @@
+import { cp, mkdir, readFile, writeFile } from 'node:fs/promises';
+import { fileURLToPath } from 'node:url';
+const root = fileURLToPath(new URL('../', import.meta.url));
+await mkdir(`${root}dist`, { recursive: true });
+await cp(`${root}public`, `${root}dist`, { recursive: true });
+const reporting = await readFile(`${root}server/usage.js`, 'utf8');
+const worker = await readFile(`${root}worker.js`, 'utf8');
+const reportingImport = "import { getApiUsage } from './server/usage.js';";
+if (!worker.startsWith(reportingImport)) throw new Error('Worker bundle entry changed; update the build.');
+await writeFile(`${root}dist/_worker.js`, reporting.replace(/^export /gm, '') + '\n' + worker.replace(reportingImport, ''));
+const routes = JSON.parse(await readFile(`${root}dist/_routes.json`, 'utf8'));
+if (routes.include[0] !== '/*' || routes.exclude.length) throw new Error('All routes must require authentication.');
+await writeFile(`${root}dist/.assetsignore`, '_worker.js\n_routes.json\n.assetsignore\n');
+console.log('Built dist/ with authentication on every route. No runtime dependencies.');

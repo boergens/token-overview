@@ -1,0 +1,19 @@
+node_modules/
+dist/
+artifacts/
+__pycache__/
+*.tmp
+.wrangler/
+.dev.vars
+.env*
+
+# Private to one deployment: copy from the .example files
+wrangler.toml
+collector/plan-credits.json
+DEPLOYMENT.local.md
+
+# Personal usage data, and provider answers that contain account identifiers
+collector/live.json
+collector/live.push.json
+collector/history.jsonl
+collector/agy-workspace/

@@ -1,0 +1,18 @@
+{
+  "name": "private-token-overview",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "test": "node --test tests/*.test.mjs && python3 -I collector/test_collect.py && python3 -I collector/test_forecast.py",
+    "dev": "node scripts/dev.mjs",
+    "preview:file": "node scripts/preview.mjs",
+    "deploy": "npm run build && wrangler pages deploy dist --branch main",
+    "collect": "python3 -I collector/collect.py",
+    "backtest": "python3 -I collector/backtest.py"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

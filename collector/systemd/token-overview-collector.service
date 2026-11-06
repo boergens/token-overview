@@ -1,0 +1,12 @@
+[Unit]
+Description=token-overview: read Claude/ChatGPT allowances from the local CLI sign-ins and publish them to the dashboard feed
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+WorkingDirectory=@PROJECT@
+Environment=WRANGLER_SEND_METRICS=false
+Environment=PATH=@HOME@/.local/bin:/usr/local/bin:/usr/bin:/bin
+ExecStart=/usr/bin/python3 -I @PROJECT@/collector/collect.py
+TimeoutStartSec=180
